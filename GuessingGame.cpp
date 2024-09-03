@@ -30,7 +30,7 @@ int main(){
       number_of_guesses=number_of_guesses+1;
       cout<<number_of_guesses<<endl;
       //asks the user if they want to play again
-      string play_again;
+      char[]play_again;
       cout<<"Would you like to play again?: ";
       cin>>play_again;
       if (play_again=="yes" || play_again=="y" || play_again=="Yes" || play_again=="Y"){
