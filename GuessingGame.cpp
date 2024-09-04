@@ -1,7 +1,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
-#include <string>
+#include <cstring>
 using namespace std;
 
 //1. No global variables. (Global constants are all right.)
@@ -18,7 +18,8 @@ int main(){
   int random_number=0;
   int number_of_guesses=0;
   random_number=1+ rand()%100;
-  while (true){
+  bool stillPlaying=true;
+  while (stillPlaying){
     // takes in the players guess
     int player_guess;
     cout<<"Please make a guess: ";
@@ -30,13 +31,13 @@ int main(){
       number_of_guesses=number_of_guesses+1;
       cout<<number_of_guesses<<endl;
       //asks the user if they want to play again
-      char[]play_again;
+      char play_again[2];
       cout<<"Would you like to play again?: ";
       cin>>play_again;
-      if (play_again=="yes" || play_again=="y" || play_again=="Yes" || play_again=="Y"){
+      if (strcmp(play_again,"y")==0){
 	main();
        }
-      else {
+      else if (strcmp(play_again,"n")==0) {
 	exit(0);
        }
      }
@@ -55,5 +56,3 @@ int main(){
   
   
 }
-
-
