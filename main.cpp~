@@ -1,0 +1,303 @@
+#include <iostream>
+#include<cstring>
+#include "media.h"
+#include "movies.h"
+#include "videoGames.h"
+#include "music.h"
+#include <vector>
+#include <bits/stdc++.h>
+
+using namespace std;
+
+//declaration of different functions that will be used in this program
+
+//enters the different functions for Movies, VideoGames, and Music and then asks whether the user wants to add, delete, search, or quit 
+void doMovie(vector<Media*>&mediaTypes);
+void doVideoGames(vector<Media*>&mediaTypes);
+void doMusic(vector<Media*>&mediaTypes);
+
+//adding the various different media types into the mediaTypes vector - need seperate functions for all of these because of the different parameters 
+void addMovie(vector<Media*>& mediaTypes);
+void addVideoGames(vector<Media*>&mediaTypes);
+void addMusic(vector<Media*>&mediaTypes);
+
+//one search function because we are searching the whole media database not individual media types 
+void searchMediaTypes(vector<Media*>&mediaTypes);
+//searching by year
+void searchYear(vector<Media*>&mediaTypes);
+//searching by titles
+void searchTitles(vector<Media*>&mediaTypes);
+void deleteMediaTypes(vector<Media*>&mediaTypes);
+void deleteYear(vector<Media*>&mediaTypes);
+void deleteTitle(vector<Media*>&mediaTypes);
+
+int main(){
+
+  vector<Media*> mediaTypes;
+  while (true){
+      char typeofmedia[120];
+      cout<<"What type of media would you like to manipulate: MOVIES, VIDEOGAMES, or MUSIC? Or would you like to QUIT?"<<endl;
+      cin>>typeofmedia;
+      if(strcmp(typeofmedia,"MOVIES")==0){
+	doMovie(mediaTypes);
+      }
+      else if(strcmp(typeofmedia,"VIDEOGAMES")==0){
+	doVideoGames(mediaTypes);
+      }
+      else if(strcmp(typeofmedia,"MUSIC")==0){
+	doMusic(mediaTypes);
+      }
+      else if(strcmp(typeofmedia,"QUIT")==0){
+	exit(0);
+      }
+  }
+}
+
+void doMovie(vector <Media*>& mediaTypes){
+  char function [120];
+  cout<<"Do you want to ADD, DELETE, SEARCH, OR QUIT"<<endl;
+  cin>>function;
+  if (strcmp(function,"ADD")==0){
+    addMovie(mediaTypes);
+  }
+  else if (strcmp(function,"SEARCH")==0){
+    searchMediaTypes(mediaTypes);
+  }
+  else if(strcmp(function,"DELETE")==0){
+    deleteMediaTypes(mediaTypes);
+  }
+  else if (strcmp(function,"QUIT")==0){
+    exit(0);
+  }
+}
+
+
+void doVideoGames(vector <Media*>& mediaTypes){
+  char function [120];
+  cout<<"Do you want to ADD, DELETE, SEARCH, OR QUIT"<<endl;
+  cin>>function;
+  if (strcmp(function,"ADD")==0){
+    addVideoGames(mediaTypes);
+  }
+  else if(strcmp(function,"SEARCH")==0){
+    searchMediaTypes(mediaTypes);
+  }
+  else if(strcmp(function,"DELETE")==0){
+    deleteMediaTypes(mediaTypes);
+  }
+  else if (strcmp(function,"QUIT")==0){
+    exit(0);
+  }
+}
+
+void doMusic(vector <Media*>& mediaTypes){
+  char function [120];
+  cout<<"Do you want to ADD, DELETE, SEARCH, OR QUIT"<<endl;
+  cin>>function;
+  if (strcmp(function,"ADD")==0){
+    addMusic(mediaTypes);
+  }
+  else if(strcmp(function,"SEARCH")==0){
+    searchMediaTypes(mediaTypes);
+  }
+  else if(strcmp(function,"DELETE")==0){
+    deleteMediaTypes(mediaTypes);
+  }
+  else if (strcmp(function,"QUIT")==0){
+    exit(0);
+  }
+}
+
+
+
+void addVideoGames(vector<Media*>&mediaTypes){
+  cout<<"got here"<<endl;
+  Media* videoGamesMedia=new Media();
+  char*title=new char[120];
+  char*publisher=new char[120];
+  int year;
+  int rating;
+  cout<<"Please enter the title of this video game: "<<endl;
+  cin.ignore();
+  cin.getline(title, 120,'\n');
+  cout<<"Please enter the publisher of this video game: "<<endl;
+  cin.getline(publisher,120,'\n');
+  cout<<"Please enter the year this video game was produced: "<<endl;
+  cin>>year;
+  cout<<"Please enter the rating of this video game: "<<endl;
+  cin>>rating;
+
+  videoGames* newVideoGame=new videoGames(title,publisher,year,rating);
+  mediaTypes.push_back(newVideoGame);
+  
+}
+
+
+
+void addMovie(vector<Media*>& mediaTypes){
+  cout<<"here"<<endl;
+  Media* movieMedia=new Media();
+  char* title= new char[120];
+  char* director=new char [120];
+  int year;
+  int duration;
+  int rating;
+  cout<<"Please enter the title of this movie: "<<endl;
+  cin.ignore();
+  cin.getline(title, 120,'\n');
+  cout<<"Please enter the director of this movie: "<<endl;
+  cin.getline(director,120,'\n');
+  cout<<"Please enter the year this movie was produced: "<<endl;
+  cin>>year;
+  cout<<"Please enter the duration of this movie: "<<endl;
+  cin>>duration;
+  cout<<"Please enter the rating of this movie: "<<endl;
+  cin>>rating;
+
+  movies* newMovie=new movies(title,director,year,duration,rating);
+  mediaTypes.push_back(newMovie);
+  
+}
+
+
+
+void addMusic(vector<Media*>& mediaTypes){
+  cout<<"here"<<endl;
+  Media* musicMedia=new Media();
+  char* title= new char[120];
+  char* artist=new char [120];
+  char* publisher=new char[120];
+  int year;
+  int duration;
+  cout<<"Please enter the title of this song : "<<endl;
+  cin.ignore();
+  cin.getline(title, 120,'\n');
+  cout<<"Please enter the artist of this song : "<<endl;
+  cin.getline(artist,120,'\n');
+  cout<<"Please enter the publisher of this song: "<<endl;
+  cin.getline(publisher,120,'\n');
+  cout<<"Please enter the year this song was produced: "<<endl;
+  cin>>year;
+  cout<<"Please enter the duration of this song: "<<endl;
+  cin>>duration;
+
+  Music* newMusic=new Music(title,artist,publisher,year,duration);
+  mediaTypes.push_back(newMusic);
+
+}
+
+
+void searchMediaTypes(vector<Media*>& mediaTypes){
+  cout<<"got here"<<endl;
+  char*searchParameters=new char[120];
+  cin.ignore();
+  cout<<"Would you like to search the database using TITLE or YEAR"<<endl;
+  cin.getline(searchParameters,120,'\n');
+  if(strcmp(searchParameters,"TITLE")==0){
+    searchTitles(mediaTypes);
+  }
+  else if(strcmp(searchParameters,"YEAR")==0){
+    searchYear(mediaTypes);
+  }
+}
+
+void searchTitles(vector<Media*>&mediaTypes){
+  char*inputTitle=new char[120];
+  cout<<"Please enter the title of the media"<<endl;
+  cin.getline(inputTitle,120,'\n');
+  for (int i = 0; i < mediaTypes.size(); i++) {
+      if(strcmp(inputTitle, mediaTypes[i]->getTitle())== false) {
+	cout << endl;
+	mediaTypes[i]->printMedia();
+	cout << endl;
+      }
+  }
+}
+
+void searchYear(vector<Media*>&mediaTypes){
+  int inputYear;
+  cout<<"Please enter the year the media was produced"<<endl;
+  cin>>inputYear;
+  for (int i = 0; i < mediaTypes.size(); i++) {
+      if(mediaTypes[i]->getYear()== inputYear) {
+        cout << endl;
+        mediaTypes[i]->printMedia();
+        cout << endl;
+      }
+  }
+
+
+}
+
+
+void deleteMediaTypes(vector<Media*>&mediaTypes){
+  cout<<"got here"<<endl;
+  char*searchParameters=new char[120];
+  cin.ignore();
+  cout<<"Would you like to delete from the database using TITLE or YEAR"<<endl;
+  cin.getline(searchParameters,120,'\n');
+  if(strcmp(searchParameters,"TITLE")==0){
+    deleteTitle(mediaTypes);
+  }
+  else if(strcmp(searchParameters,"YEAR")==0){
+    deleteYear(mediaTypes);
+  }
+
+}
+
+void deleteTitle(vector<Media*>&mediaTypes){
+  char*inputTitle=new char[120];
+  int indexNumber;
+  cout<<"Please enter the title of the media"<<endl;
+  cin.getline(inputTitle,120,'\n');
+  for (int i = 0; i < mediaTypes.size(); i++) {
+      if(strcmp(inputTitle, mediaTypes[i]->getTitle())== 0) {
+        cout << endl;
+        mediaTypes[i]->printMedia();
+	//indexNumber=i;
+	char*wantToDelete=new char[10];
+	cout<<"Are you sure you want to delete this media YES or NO?"<<endl;
+	cin.ignore();
+	cin.getline(wantToDelete,10,'\n');
+	if(strcmp(wantToDelete,"YES")==0){
+	  cout<<endl;
+	  cout<<"You deleted: "<<mediaTypes[i]->getTitle()<<endl;
+	  mediaTypes.erase(mediaTypes.begin() + i);
+	}
+	else if (strcmp(wantToDelete,"NO")==0){
+	  ;
+	}
+        cout <<endl;
+      }
+  }
+
+}
+
+void deleteYear(vector<Media*>&mediaTypes){
+  int inputYear;
+  int indexNumber;
+  cout<<"Please enter the year the media was produced"<<endl;
+  cin>>inputYear;
+  for (int i = 0; i < mediaTypes.size(); i++) {
+      if(mediaTypes[i]->getYear()== inputYear) {
+        cout << endl;
+        mediaTypes[i]->printMedia();
+        indexNumber=i;
+        char*wantToDelete=new char[10];
+        cout<<"Are you sure you want to delete this media YES or NO?"<<endl;
+	cin.ignore();
+	cin.getline(wantToDelete,10,'\n');
+        if(strcmp(wantToDelete,"YES")==0){
+          cout<<endl;
+          cout<<"You deleted: "<<mediaTypes[indexNumber]->getTitle()<<endl;
+          mediaTypes.erase(mediaTypes.begin() + indexNumber);
+        }
+        else if (strcmp(wantToDelete,"NO")==0){
+          ;
+        }
+        cout <<endl;
+
+      }
+  }
+
+}

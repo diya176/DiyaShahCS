@@ -1,0 +1,36 @@
+#include <iostream>
+#include <cstring>
+#include "videoGames.h"
+
+using namespace std;
+
+videoGames::videoGames(){
+  publisher=new char[120];
+  rating=0;
+}
+
+
+videoGames::videoGames(char* title,char* newpublisher,int year, int newrating):Media(title,year){
+  publisher=new char[120];
+  strcpy(publisher,newpublisher);
+  rating=newrating;
+}
+
+videoGames::~videoGames(){
+  delete[] publisher;
+}
+
+char*videoGames::getPublisher(){
+  return publisher;
+}
+
+int videoGames::getRating(){
+  return rating;
+}
+
+void videoGames::printMedia() {
+  cout << "Videogame: " << endl;
+  Media::printMedia();
+  cout << "Publisher: " << publisher << endl;
+  cout << "Rating: " << rating << endl;
+}
