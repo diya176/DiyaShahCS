@@ -1,0 +1,96 @@
+#include <iostream>
+#include <cstring>
+#include <vector>
+#include <iterator>
+#include <iomanip>
+using namespace std;
+
+struct Students
+{
+  char first_name[22];
+  char last_name[22];
+  int id;
+  float gpa;
+};
+
+void AddName(vector <Students>& studentList);
+void printName(vector <Students>& studentList);
+void deleteName(vector <Students>&studentList);
+int main()
+{
+  vector <Students> studentList;
+  while (true)
+  {
+    char input[21];
+    cin>>input;
+    if (strcmp(input,"ADD")==0)
+    {
+      AddName(studentList);
+    }
+    else if (strcmp(input,"PRINT")==0)
+    {
+      printName(studentList);
+    }
+    else if(strcmp(input,"DELETE")==0)
+    {
+      deleteName(studentList);
+    }
+    else if (strcmp(input,"QUIT")==0)
+    {
+      exit(0);
+    }
+  }
+ 
+}
+
+
+void AddName(vector <Students> & studentList)
+{
+  char first_name[22];
+  char last_name[22];
+  int id;
+  float gpa;
+  cout<<"Please enter the student's first name: ";
+  cin>>first_name;
+  cout<<"Please enter the student's last name: ";
+  cin>>last_name;
+  cout<<"Please enter the student's ID number: ";
+  cin>>id;
+  cout<<"Please enter the student's GPA: ";
+  cin>>gpa;
+  Students new_person;
+
+  strcpy(new_person.first_name, first_name);
+  strcpy(new_person.last_name, last_name);
+  new_person.id = id;
+  new_person.gpa = gpa;
+  studentList.push_back(new_person);
+}
+
+void printName(vector<Students> & studentList)
+{
+  for (std::vector<Students>:: iterator it=studentList.begin(); it!=studentList.end();++it)
+  {
+    cout<<it->first_name<<endl;
+    cout<<it->last_name<<endl;
+    cout<<it->id<<endl;
+    cout<<fixed<<setprecision(2)<<it->gpa<<endl;
+  }
+}
+
+void deleteName(vector<Students>& studentList)
+{
+  int id_to_delete;
+  cin>>id_to_delete;
+  int index=0;
+  for (std::vector<Students>:: iterator it=studentList.begin(); it!=studentList.end();++it)
+  {
+    index=index+1;
+    if (it->id==id_to_delete)
+    {
+      int value=index;
+      //delete erase break out of function 
+      cout<<"the same"<<endl;
+    }
+  }
+}

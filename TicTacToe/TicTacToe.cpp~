@@ -1,0 +1,194 @@
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+void print_board(char board[3][3]);
+bool checkIsValidMove (int row, int column, char board[3][3]);
+void placePlayer(char player,int row,int column,char board[3][3]);
+void take_turn (char player, char board[3][3]);
+bool checkWin(char player, char board[3][3]);
+
+int main()
+{
+  char board[3][3];
+  for (int i=0; i<3;i++)
+  {
+    for (int j=0;j<3;j++)
+    {
+      board[i][j]='-';
+    }
+  }
+  print_board(board);
+  int row;
+  int column;
+  char player='X';
+  take_turn(player,board);
+  return 0;
+}
+
+bool checkIsValidMove(int row, int column, char board[3][3])
+{
+  if (board[row][column]=='-')
+  {
+    return true;
+  }
+  else if (board[row][column]=='X' || board[row][column]=='Y')
+  {
+    cout<<"hello";
+    return false;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+void placePlayer(char player,int row,int column,char board[3][3])
+{
+  if (checkIsValidMove(row,column,board))
+  {
+    board[row][column]=player;
+  }
+}
+
+void print_board(char board[3][3])
+{
+  cout<<"\n";
+  cout<<"\t0\t\t1\t\t2";
+  for(int i=0;i<3;i++)
+  {
+    cout<<"\n"<<endl;
+    cout<<i;
+    for (int j=0;j<3;j++)
+    {
+      cout<<"\t"<<board[i][j]<<"\t";
+    }
+    cout<<"\n"<<endl;
+  }
+}
+
+void checkBoard(char board[3][3])
+{
+  if (board[0][0]=='-' || board [0][1]=='-'||board[0][2]=='-' || board[1][0]=='-'|| board[1][1]=='-'||board[1][2]=='-'||board[2][0]=='-'||board[2][1]=='-' || board[2][2]=='-')
+  {
+    cout << ' '<<endl;
+  }
+  else
+  {
+    cout<<"ENDDDDDD"<<endl;
+    exit(0);
+  }
+}
+
+bool checkWin(char player, char board[3][3])
+{
+  if(board[0][0]==player && board[1][0]==player && board [2][0]==player)
+  {
+    return true; 
+  }
+  else if (board[0][1]==player && board[1][1]==player && board[2][1]==player)
+  {
+    return true;
+  }
+  else if (board [0][2]==player && board[1][2]==player && board[2][2]==player)
+  {
+    return true;
+  }
+  else if (board[0][0]==player && board[0][1]==player && board[0][2]==player)
+  {
+    return true;
+  }
+  else if (board[1][0]==player && board[1][1]==player && board[1][2]==player)
+  {
+    return true;
+  }
+  else if (board[2][0]==player && board[2][1]==player && board [2][2]==player)
+  {
+    return true;
+  }
+  else if (board[0][0]==player && board[1][1]==player && board[2][2]==player)
+  {
+    return true;
+  }
+  else if (board[0][2]==player && board[1][1]==player && board[2][0]==player)
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+void take_turn(char player,char board[3][3])
+{
+  int row;
+  int column;
+  while (true)
+  {
+    while (true)
+    {
+      checkBoard(board);
+      cout<<"Please enter a number for the row where you want to place your piece"<<endl;
+      cin>>row;
+      if (row==0 || row==1 || row==2)
+      {
+	break;
+      }
+      else
+      {
+	cout<<"Failed"<<endl;
+	;
+      }
+    }
+    while (true)
+    {
+      checkBoard(board);
+      cout<<"Please enter a number for the column where you want to place your piece"<<endl;
+      cin>>column;
+      if (column==0|| column==1|| column==2)
+      {
+	break;
+      }
+      else
+      {
+	cout<<"Failed"<<endl;
+	;
+      }
+    }
+    cout<<row;
+    cout<<column;
+    if(checkIsValidMove(row,column,board)==false)
+    {
+      print_board(board);
+      cout<<"Try Again!"<<endl;
+      take_turn(player,board);
+    }
+    else
+    {
+      ;
+    }
+    placePlayer(player,row,column,board);
+    print_board(board);
+    if (player=='X')
+    {
+      if (checkWin(player,board))
+      {
+	cout<<player<<" wins!"<<endl;
+	exit(0);
+      }
+      player='O';
+      take_turn(player,board);
+    }
+    else
+    {
+      if (checkWin(player,board))
+      {
+	cout<<player<<" wins!"<<endl;
+	exit(0);
+      }
+      player='X';
+      take_turn(player,board);
+    }
+  }
+}

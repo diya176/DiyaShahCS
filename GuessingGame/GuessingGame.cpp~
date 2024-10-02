@@ -1,0 +1,23 @@
+#include <cstdlib>
+#include <ctime>
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main(){
+  srand(time(NULL));
+  int random_number=0;
+  int number_of_guesses=0;
+  random_number=1+ rand()%100;
+  cout<<random_number<<endl;
+  while (true){
+    string player_guess;
+    cout<<"Please make a guess";
+    cin>> player_guess;
+    if int(player_guess)==random_number{
+	break;
+     }
+   }
+  
+  
+}
