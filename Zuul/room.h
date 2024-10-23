@@ -5,7 +5,8 @@
 #include <iostream>
 #include <cstring>
 #include <map>
-
+#include"item.h"
+#include <vector>
 using namespace std;
 
 
@@ -16,19 +17,19 @@ class room{
   void setExit(char* direction, room* neighbor);
   char* getShortDescription();
   char* getLongDescription();
-  room getExit(char* direction);
+  map<char*,room*> getExit();
   int index;
   char* direction;
   room* neighbor;
   //char* itemName;
   //item getItem(char* itemName);
   //void removeItem(char* itemName);
-  //item newitem;
-  //void setItem(item newitem);
+  item* newitem;
+  void setItem(item* newitem);
+  void printItem();
   //char* getRoomItems();
-  //list<char> items;
+  vector<item*> items;
   map<char*, room*>exits;
- private:
   char* description;
   void getExitString();
 };

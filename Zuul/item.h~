@@ -1,0 +1,18 @@
+//Header guard
+#ifndef ITEM
+#define ITEM
+
+#include <iostream>
+#include <cstring>
+#include <map>
+
+using namespace std;
+
+
+class room{
+ public:
+  item();
+  char* description;
+  item(char*description);
+  char* getItemDescription();
+}

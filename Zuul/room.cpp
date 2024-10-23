@@ -29,3 +29,20 @@ void room::getExitString(){
   }
   cout << endl;
 }
+
+map<char*,room*> room::getExit(){
+  return exits;
+}
+
+void room::setItem(item* newItem){
+  items.push_back(newItem);
+}
+
+void room::printItem(){
+  cout<<"Items: "<<endl;
+  for(int i=0; i<items.size();i++){
+    char outs[1000];
+    strcpy(outs,items[i]->getItemDescription());
+    cout<<outs<<endl;
+  }
+}
