@@ -7,7 +7,7 @@
 using namespace std;
 
 void goToPlace(vector<room*>rooms, map<char*,room*> &exits,room* &currentRoom);
-//void getItem(vector<item*>items, vector<items*>currentItems,room*&currentRoom);
+void getItem(vector<item*>items, vector<item*>currentItems,room*&currentRoom);
 
 int main(){
   vector <room*> rooms;
@@ -116,6 +116,17 @@ int main(){
       cout<<"got here"<<endl;
       goToPlace(rooms,exits,currentRoom);
     }
+    else if(strcmp(player_Direction,"GET")==0){
+      getItem(items,currentItems,currentRoom);
+    }
+    else if (strcmp(player_Direction,"QUIT")==0){
+      exit(0);
+      cout<<"Goodbye!"<<endl;
+    }
+    else{
+      ;
+    }
+
   }  
 }
 
@@ -135,4 +146,24 @@ void goToPlace(vector<room*>rooms, map<char*,room*> &exits,room* &currentRoom){
       break;
     }
   }
+}
+
+void getItem(vector<item*>items, vector<item*>currentItems,room*&currentRoom){
+  char itemNames[1000];
+  currentRoom->printItem();
+  cout<<"What item would you like to get"<<endl;
+  cin>>itemNames;
+  if(currentRoom->noItems()==0){
+    cout<<"There are no "<<itemNames<<" in the room."<<endl;
+  }
+  else{
+    //currentRoom->matchItem(itemNames);
+    currentItems.push_back(currentRoom->matchItem(itemNames));
+    for (std::vector<item*>:: iterator it=currentItems.begin(); it!=currentItems.end();++it){
+      cout<<"inside this thing"<<endl;
+      cout<<(*it)->getItemDescription()<<endl;;
+    }
+    //items.erase(currentRoom->matchItem(itemNames));
+  }
+  //item* tempNewItem=new item ((char*)currentRoom);currentRoom 
 }

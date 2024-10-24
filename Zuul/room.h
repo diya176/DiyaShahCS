@@ -32,6 +32,10 @@ class room{
   map<char*, room*>exits;
   char* description;
   void getExitString();
+  int noItems();
+  char* itemDescription;
+  item* matchItem(char*itemDescription);
+  
 };
 
 #endif
