@@ -21,9 +21,9 @@ class room{
   int index;
   char* direction;
   room* neighbor;
-  //char* itemName;
+  char* itemName;
   //item getItem(char* itemName);
-  //void removeItem(char* itemName);
+  void removeItem(char* itemName);
   item* newitem;
   void setItem(item* newitem);
   void printItem();

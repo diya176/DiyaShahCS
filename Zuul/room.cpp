@@ -67,3 +67,12 @@ item* room::matchItem(char* newdescription){
   }
   //cout<<"got eohaoshfsdfhsudtqourr83kehaksjfsd"<<endl;
 }
+
+void room::removeItem(char*it){
+  vector<item*>::iterator i;
+  for(int i=0;i<items.size();i++){
+      if(strcmp(it,items[i]->getItemDescription())==0){
+        items.erase(items.begin()+i);
+      }
+    }
+}
