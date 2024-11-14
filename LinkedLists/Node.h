@@ -1,14 +1,14 @@
 #ifndef NODE_H
 #define NODE_H
-
+#include "Student.h"
 #include <iostream>
-
+#include <cstring>
 
 using namespace std;
 
 class Node{
  public:
-  Node(Student*newStudent);
+  Node(Student* newStudent);
   ~Node();
   void setStudent (Student* newStudent);
   char* getStudent();
@@ -20,6 +20,6 @@ class Node{
   Node* next;
 
 
-}
+};
 
 #endif

@@ -1,0 +1,15 @@
+#include <iostream>
+#include <cstring>
+#include "Student.h"
+#include "Node.h"
+
+int main(){
+  Student* testStudent=new Student ((char*)"Hello");
+  char outs[1000];
+
+  //test to make sure that student is being created properly and that the name is being returned appropriately 
+  strcpy(outs,testStudent->getName());
+  cout<<outs<<endl;
+  //Node* newNode=new Node("HELLLLLLLLO")
+  //cout<<"this works"<<endl;
+}
