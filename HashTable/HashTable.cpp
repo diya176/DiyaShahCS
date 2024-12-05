@@ -21,14 +21,15 @@ struct Students
   char first_name[22];
   char last_name[22];
   int id;
+  //this is the key 
   int hash;
   float gpa;
   Students* next = NULL;
 };
 
 
-void AddName(Students** hashtable, int size);
-Students** add(Students* student, Students** hashtable, int size);
+void AddName(Students** hashtable, int &size);
+Students** add(Students* student, Students** hashtable, int &size);
 
 int main()
 {
@@ -70,7 +71,7 @@ int main()
 }
 
 
-void AddName(Students** hashtable, int size)
+void AddName(Students** hashtable, int &size)
 {
   //inputting of all the variables needed to add a new person 
   char first_name[22];
@@ -88,43 +89,74 @@ void AddName(Students** hashtable, int size)
   cin>>student->gpa;
   //pushing that into the vector and the struct to make a new person
   hashtable = add(student, hashtable, size);
+  
 }
 
 
-Students** add(Students* student, Students** hashtable, int size) {
+Students** add(Students* student, Students** hashtable, int &size) {
   Students* current = hashtable[student->hash];
-  int collisions = 1;
+  int collisions = 0;
 
-  if(current == NULL){
-    
+  if(current == NULL){    
+
     hashtable[student->hash] = student;
   }
   //if something is already there
-  else if(hashtable[student->hash]!=NULL){
+
+  else{
     
     
     while(current->next!=NULL){
       current = current->next;
       
       collisions++;
-      
+      cout<<"A collision happened"<<endl;
     }
     
     current->next = student;
   }
-    /*
-  //Check and rehash if needed
-  if (current == NULL) {
-    table[student->hash] = student;
-  }
-  else if (table[student->hash] != NULL) {
-    while (current->next !=NULL) {
-      current = current->next;
-      collisions++;
+  
+  if (collisions==3){
+    cout<<"3 collisions happened! Rehashing the table :)"<<endl;
+    Students** newTable = new Students*[size*2]();
+    for (int i=0;i<size;i++){
+      Students* currenttemp= hashtable[i];
+      while (currenttemp!=NULL){
+
+	int newHash= student->id % (size*2);
+
+        Students* studentToBeCopiedOver= new Students();
+        studentToBeCopiedOver->next = NULL;
+        strcpy(studentToBeCopiedOver->first_name,currenttemp->first_name);
+        strcpy(studentToBeCopiedOver->last_name,currenttemp->last_name);
+        studentToBeCopiedOver->id = currenttemp->id;
+        studentToBeCopiedOver->gpa = currenttemp->gpa;
+        studentToBeCopiedOver->hash=newHash;
+
+	//if slot in the new table with the new hash is empty 
+	if (newTable[newHash] == NULL) {
+	  //add student into that slot 
+          newTable[newHash] = studentToBeCopiedOver;
+	}
+	//if the slot is not empty - that is a problem because that means it is a collision 
+	else{
+	  //set a temp student to that place that is already filled up in the table
+	   Students* temp = newTable[newHash];
+	   //while we havent found a spot to put this student keep going here 
+	   while(temp->next != NULL){
+	     // keep moving to the next spot 
+	     temp=temp->next;
+	   }
+	   //we found a place! YAY! put the student here 
+	   temp->next=studentToBeCopiedOver;
+	}
+	//move to the next one 
+	currenttemp=currenttemp->next;
+      }
     }
-    current->next = student;
+    hashtable=newTable;
+    size*=2;
   }
-	    */
-  //  cout << "Student added!" << endl;
-  return hashtable;  
+  return hashtable;
 }
+ 
