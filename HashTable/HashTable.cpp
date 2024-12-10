@@ -30,6 +30,9 @@ struct Students
 
 void AddName(Students** hashtable, int &size);
 Students** add(Students* student, Students** hashtable, int &size);
+void printName(Students** hashtable, int &size);
+Students** deleteName(Students**hashtable, int &size);
+
 
 int main()
 {
@@ -50,18 +53,18 @@ int main()
     {
       AddName(hashtable,size);
     }
-    /*
     //if print is inputted go to that function 
     else if (strcmp(input,"PRINT")==0)
     {
-      printName(studentList);
+      printName(hashtable,size);
     }
+    
     else if(strcmp(input,"DELETE")==0)
     {
-      deleteName(studentList);
+      deleteName(hashtable,size);
     }
     //if quit is inputted quit the function and the program
-    */
+    
     else if (strcmp(input,"QUIT")==0)
     {
       exit(0);
@@ -160,3 +163,47 @@ Students** add(Students* student, Students** hashtable, int &size) {
   return hashtable;
 }
  
+void printName(Students** hashtable, int &size)
+{
+  for (int i=0; i<size; i++){
+    if(hashtable[i]!=NULL){
+      //cout<<i<<"here"<<endl;
+      cout<<hashtable[i]->first_name<<endl;
+
+      Students* current= hashtable[i];
+      while (current->next!=NULL){
+	current=current->next;
+	cout<<current->first_name<<endl;
+      }
+    }
+    else{
+      ;
+    }
+  }
+}
+
+
+Students** deleteName(Students** hashtable, int &size)
+{
+  cout<<"please enter the first name of the student you want to delete"<<endl;
+  char input[1000];
+  cin>>input;
+  for (int i=0; i<size; i++){
+    if(hashtable[i]!=NULL){
+      //cout<<i<<"here"<<endl;
+      Students* current= hashtable[i];
+      while (current!=NULL){
+	if(strcmp(current->first_name,input)==0){
+	  cout<<current->first_name<<endl;
+	  cout<<current->last_name<<endl;
+	  main;
+	}
+	current=current->next;
+      }
+    }
+    else{
+      ;
+    }
+  }
+}
+
