@@ -3,6 +3,8 @@
 #include <vector>
 #include <iterator>
 #include <iomanip>
+#include <fstream>
+#include <string>
 using namespace std;
 
 /*This program includes an empty vector of structs to which youu can add,delete, or print students.
@@ -28,10 +30,11 @@ struct Students
 };
 
 
-void AddName(Students** hashtable, int &size);
-Students** add(Students* student, Students** hashtable, int &size);
-void printName(Students** hashtable, int &size);
-Students** deleteName(Students**hashtable, int &size);
+void AddName(Students** &hashtable, int &size);
+void GenerateName(Students** &hashtable, int &size);
+Students** add(Students* student, Students** &hashtable, int &size);
+void printName(Students** &hashtable, int &size);
+Students** deleteName(Students** &hashtable, int &size);
 
 
 int main()
@@ -40,18 +43,21 @@ int main()
   //this is the vector that will be passed everywhere
   int size=100;
   Students** hashtable = new Students*[size];
-
+  srand(time(NULL));
   while (true)
   {
     char input[21];
     
    
-    cout<<"Would you like to ADD, PRINT, or DELETE a student or would you like to QUIT this program?"<<endl;
+    cout<<"Would you like to ADD, GENERATE, PRINT, or DELETE a student or would you like to QUIT this program?"<<endl;
     cin>>input;
     //if add is inputted go to the AddName function 
     if (strcmp(input,"ADD")==0)
     {
       AddName(hashtable,size);
+    }
+    else if (strcmp(input, "GENERATE")==0){
+      GenerateName(hashtable,size);
     }
     //if print is inputted go to that function 
     else if (strcmp(input,"PRINT")==0)
@@ -74,7 +80,7 @@ int main()
 }
 
 
-void AddName(Students** hashtable, int &size)
+void AddName(Students** &hashtable, int &size)
 {
   //inputting of all the variables needed to add a new person 
   char first_name[22];
@@ -95,8 +101,47 @@ void AddName(Students** hashtable, int &size)
   
 }
 
+void GenerateName(Students** &hashtable, int &size){
+  cout<<"How many students would you like to add?"<<endl;
+  int students;
+  cin>>students;
+  for (int i=0; i<students; i++){
+    //ifstream myfile;
+    //myfile.open("FirstName.txt");
+    ifstream f("FirstName.txt");
+    int num=rand()% 427;
+    char firstname[100];
+    for (int i = 1; i <= num; i++){
+      f.getline(firstname,sizeof(firstname));
+    }
+    f.close();
 
-Students** add(Students* student, Students** hashtable, int &size) {
+    ifstream l("LastName.txt");
+    int num2=rand()% 441;
+    char lastname[100];
+    for (int i = 1; i <= num2; i++){
+      l.getline(lastname,sizeof(lastname));
+    }
+    l.close();
+
+
+    
+    //cout<<firstName;
+    Students* student= new Students();
+    strcpy(student->first_name,firstname);
+    cout<<student->first_name;
+    strcpy(student->last_name,lastname);
+    cout<<student->last_name;
+    int id= rand()% 100001;
+    student->id=id;
+    float gpa = (double)(rand()%50)/10;
+    student->gpa = gpa;
+    hashtable = add(student, hashtable, size);
+  }
+}
+
+
+Students** add(Students* student, Students** &hashtable, int &size) {
   Students* current = hashtable[student->hash];
   int collisions = 0;
 
@@ -157,47 +202,44 @@ Students** add(Students* student, Students** hashtable, int &size) {
 	currenttemp=currenttemp->next;
       }
     }
+    //delete [] hashtable;  
     hashtable=newTable;
     size*=2;
+    collisions=0;
   }
   return hashtable;
 }
  
-void printName(Students** hashtable, int &size)
+
+
+
+Students** deleteName(Students** &hashtable, int &size)
 {
-  for (int i=0; i<size; i++){
-    if(hashtable[i]!=NULL){
-      //cout<<i<<"here"<<endl;
-      cout<<hashtable[i]->first_name<<endl;
-
-      Students* current= hashtable[i];
-      while (current->next!=NULL){
-	current=current->next;
-	cout<<current->first_name<<endl;
-      }
-    }
-    else{
-      ;
-    }
-  }
-}
-
-
-Students** deleteName(Students** hashtable, int &size)
-{
-  cout<<"please enter the first name of the student you want to delete"<<endl;
-  char input[1000];
+  cout<<"Please enter the ID of the student you want to delete"<<endl;
+  int input;
   cin>>input;
   for (int i=0; i<size; i++){
     if(hashtable[i]!=NULL){
       //cout<<i<<"here"<<endl;
       Students* current= hashtable[i];
+      Students* prev=NULL;
       while (current!=NULL){
-	if(strcmp(current->first_name,input)==0){
-	  cout<<current->first_name<<endl;
-	  cout<<current->last_name<<endl;
-	  main;
+	if(current->id==input){
+	  //hashtable[i]=NULL;
+	  if (prev==NULL){
+	    hashtable[i]=current->next;
+	  }
+	  else{
+	    prev->next=current->next;
+	  }
+	  //current=NULL;
+	  //current=current->next;
+	  //cout<<current->first_name<<endl;
+	  //cout<<current->last_name<<endl;
+	  return hashtable; 
+	  //main();
 	}
+	prev=current;
 	current=current->next;
       }
     }
@@ -205,5 +247,25 @@ Students** deleteName(Students** hashtable, int &size)
       ;
     }
   }
+  return hashtable;
 }
 
+
+void printName(Students** &hashtable, int &size)
+{
+  for (int i=0; i<size; i++){
+    if(hashtable[i]!=NULL){
+      //cout<<i<<"here"<<endl;
+      cout<<hashtable[i]->first_name<<" "<<hashtable[i]->last_name<<endl;
+      //cout<<hashtable[i]->last_name<<endl;
+      Students* current= hashtable[i];
+      while (current->next!=NULL){
+        current=current->next;
+        cout<<current->first_name<<endl;
+      }
+    }
+    else{
+      ;
+    }
+  }
+}
