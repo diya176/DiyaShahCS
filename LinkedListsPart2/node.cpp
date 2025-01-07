@@ -1,0 +1,40 @@
+#include "node.h"
+
+/*
+  Code taken from partner from Linked Lists 1
+  Author: Zach
+  Date: 1/7/2025
+
+ */
+
+/*
+Node::Node(){
+  stu = new Student;
+  next = NULL;
+}
+*/
+Node::Node(Student* a){
+  stu = a;
+  next = NULL;
+}
+
+Node::~Node(){
+  delete stu;
+  next = NULL;
+}
+
+void Node::setStu(Student* a){
+  stu = a;
+}
+
+Student* Node::getStu(){
+  return stu;
+}
+
+void Node::setNext(Node* newnext){
+  next = newnext;
+}
+
+Node* Node::getNext(){
+  return next;
+}
