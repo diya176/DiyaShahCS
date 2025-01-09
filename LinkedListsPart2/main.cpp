@@ -10,7 +10,7 @@ using namespace std;
 /*
   This program creates a linked list of students that we can add to, delete from, and average. 
   Author: Diya Shah
-  Date: December 2024
+  Date: 1/9/2024
  */
 
 //Intialize functions
@@ -76,7 +76,7 @@ int main() {
       cin >> idfordelete;
       cin.ignore();
 
-      cout << "You're deleting: " << idfordelete << endl;
+      //cout << "You're deleting: " << idfordelete << endl;
 
       DELETE(head, head, idfordelete, head);
     }
@@ -95,7 +95,7 @@ void ADD(Node* current, Node* previous, Student* newStudent, Node* &head) {
     // If the list is empty (head is NULL), student is the head then
     if (head == NULL) {
         head = new Node(newStudent);
-        cout << "Added student with ID: " << newStudent->getID() << " as the head." << endl;
+        //cout << "Added student with ID: " << newStudent->getID() << " as the head." << endl;
         return;
     }
 
@@ -106,7 +106,7 @@ void ADD(Node* current, Node* previous, Student* newStudent, Node* &head) {
         // If current is NULL, we are at the end of the list
         if (current == NULL) {
             previous->setNext(newNode);
-            cout << "Added student with ID: " << newStudent->getID() << " at the end." << endl;
+	    // cout << "Added student with ID: " << newStudent->getID() << " at the end." << endl;
         } else {
             // Insert before the current node
             newNode->setNext(current);
