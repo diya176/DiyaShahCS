@@ -87,21 +87,35 @@ int main(){
   cout<<endl;
 
 
-  int index=0;
-  char input[200];
-  cin>>input;
-  cout<<input<<endl;
   
-  if(strcmp(input,"Largest")==0){
-    cout<<"got here"<<endl;
-    cout<<removeAll(heap,index)<<endl;
-  }
+  numtoadd=18;
+  add(heap,size,numtoadd);
+  print(heap,0,0,size);
+  cout<<endl;
+  cout<<endl;
   
-  else if (strcmp(input,"All")==0){
-    while(heap[index] != 0) {
-      cout<<removeAll(heap, index)<<endl;
+  
+  while (true){
+    int index=0;
+    char input[200];
+    cin>>input;
+    cout<<input<<endl;
+
+    if(strcmp(input,"Largest")==0){
+      cout<<"got here"<<endl;
+      cout<<removeAll(heap,index)<<endl;
     }
+    else if (strcmp(input,"All")==0){
+      while(heap[index] != 0) {
+	cout<<removeAll(heap, index)<<endl;
+      }
+    }
+    else if (strcmp(input, "Quit")==0){
+      exit(0);
+    }
+
   }
+  
   //removeAll(heap,size,size);
   //removeAll(heap,size,size);
   //print(heap,0,0,size);
@@ -143,51 +157,62 @@ void print (int* heap,int pos, int depth, int size){
   }
 }
 
-
 int removeAll(int* heap, int index) {
 
   int temps=heap[0];
-  int size=0;
-  while(heap[size]!=0){
-    size++;
+  //cout<<heap[0]<<endl;
+  int sizes=0;
+  while(heap[sizes]!=0){
+    sizes++;
   }
   //so you dont run of the end of the array
-  size=size-1;
+  sizes=sizes-1;
   int rightNode = index;
 
   //int temps=heap[0];
   //cout<<size<<endl;
-  heap[index] = heap[size];
-  heap[size] = 0;
+  heap[index] = heap[sizes];
+  heap[sizes] = 0;
   
   //if current node is smaller than right and left
-  while((heap[rightNode] < heap[rightNode * 2]) || (heap[rightNode] < heap[rightNode * 2 + 1])) {
+  while((heap[rightNode] < heap[rightNode * 2+1]) || (heap[rightNode] < heap[rightNode * 2 + 2])) {
     //swap current with larger of left/right
     //current is now the one you swapped with
-    //cout<<heap[rightNode]<<endl;
-    //cout<<heap[rightNode*2]<<endl;
-    //cout<<heap[rightNode*2+1]<<endl;
+    //cout<<"Current Index: "<<rightNode<<endl;
+    //cout<<"Left Node Index: "<<rightNode*2+1<<endl;
+    //cout<<"Current Node Value: "<<heap[rightNode]<<endl;
+    //cout<<"Left Node Value: "<<heap[rightNode*2+1]<<endl;
+    //cout<<"Right Node Value: "<<heap[rightNode*2+2]<<endl;
     //cout<<"while loop"<<endl;
     //if left is bigger than right, replace root with left
-    if (heap[rightNode * 2] > heap[rightNode * 2 +1]) {
+    if (heap[rightNode * 2+1] > heap[rightNode * 2 +2]) {
       //cout<<"got herre?"<<endl;
       int temp = heap[rightNode];
-      heap[rightNode] = heap[rightNode*2];
-      heap[rightNode*2] = temp;
-      rightNode = rightNode*2;
+      heap[rightNode] = heap[rightNode*2+1];
+      heap[rightNode*2+1] = temp;
+      rightNode = rightNode*2+1;
     }
 
     //same thing but just for right so everything is +1
-    else if (heap[rightNode * 2 +1] > heap[rightNode *2]) {
+    else if (heap[rightNode * 2 +2] > heap[rightNode *2+1]) {
       //cout<<"got maybeee?"<<endl;
       int temp = heap[rightNode];
-      heap[rightNode] = heap[rightNode*2+1];
-      heap[rightNode*2+1] = temp; 
-      rightNode = rightNode*2+1;
+      heap[rightNode] = heap[rightNode*2+2];
+      heap[rightNode*2+2] = temp; 
+      rightNode = rightNode*2+2;
     }
   }
+  //heapify(heap,heap[0]);
   //dont have to print heap everytime but can
-  //print(heap,0,0,size);
+  //cout<<endl;
+  //cout<<endl;
+  //cout<<endl;
+  //cout<<endl;
+
+  //print(heap,0,0,sizes);
+
+  //temps=heap[0];
   return temps; 
   //print(heap,0,0,size);
 }
+
