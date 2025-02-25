@@ -1,150 +1,125 @@
 #include <iostream>
 #include <cstring>
+#include <cctype> // For isdigit()
 
 using namespace std;
 
-
 struct node
 {
-    char data;
-    node * next;
+  char data;
+  node * next;
+  node* right;
+  node* left; 
 };
 
-void push(node* &head, node*toadd);
-node*peek(node* &head);
-void pop (node*&head);
-void enqueue(node*&head, char input);
-void dequeue(node* &head);
-void shuntingYard(node*&head, char* output); 
+
+struct treeNode
+{
+  char data;
+  node* right;
+  node* left; 
+};
+
+
+void push(node* &head, node* toadd); // Using pass-by-reference for the pointer manipulation
+node* peek(node* head);
+void pop(node* &head); // Pass by reference to modify head
+void enqueue(node* &head, char input); // Pass by reference
+void dequeue(node* &head); // Pass by reference
+void shuntingYard(node* &head, char* output); // Pass by reference
+int precedence (char operators);
+void buildTree(node*&head); 
+void prefix(node*&head);
 
 int main(){
-  node* head=new node();
-
+  node* head = NULL; // Initialize head to nullptr
+  
   char input[101];
-  cin.getline(input,100,'\n');
-  //cout<<input<<endl;
+  cin.getline(input, 100, '\n');
 
-  int length=strlen(input);
-  //cout<<length<<endl;
+  int length = strlen(input);
 
   char output[101];
-  int a=0;
-  for (int i=0;i<length;i++){
-    //cout<<input[i]<<endl;
-    if(input[i]==' '){
-      ;
-    }
-    else{
-      output[a]=input[i];
+  int a = 0;
+  for (int i = 0; i < length; i++) {
+    if (input[i] != ' ') {
+      output[a] = input[i];
       a++;
     }
   }
 
-  shuntingYard(head,output);
+  shuntingYard(head, output);
 
-  //cout<<peek(head)->data<<endl;
-  /*
-  node*toadd=new node();
-  toadd->data='D';
-  push(head, toadd);
-
-  node*toadde=new node();
-  toadde->data='I';
-  push(head, toadde);
-
-
-  node*toadder=new node();
-  toadder->data='Y';
-  push(head, toadder);
-
-
-  node*toadds=new node();
-  toadds->data='A';
-  push(head, toadds);
-
-  */
-
-  
-
-  /*
-  cout<<"Got it"<<endl;
-  cout<<peek(head)->data<<endl;
-
-  
-  pop(head);
-  cout<<head->data<<endl;
-  cout<<peek(head)->data<<endl;
-
-
-  pop(head);
-  cout<<head->data<<endl;
-  cout<<peek(head)->data<<endl;
-
-  //enqueue(head,'L');
-  dequeue(head);
-  cout<<head->data<<endl;
-  cout<<peek(head)->data<<endl;
-  //cout<<head->data<<endl;
-  */
-  return 0; 
+  buildTree(head);
+  prefix(head);
+  return 0;
 }
 
 ///STACK STUFF for shunting yard algorithm
-//need a push pop and peek function
 
-
-void push(node* &head, node* toadd){
-  if(head==NULL){
-    head=toadd;
+void push(node*& head, node* toadd) { // Pass by reference to modify the head pointer
+  if (head == NULL) {
+    head = toadd;
+  } 
+  else {
+    node* current = head;
+    while (current->next != NULL) {
+      current = current->next;
+    }
+    current->next = toadd;
   }
-  node*current=head;
-  while(current->next!=NULL){
-    current=current->next;
-  }
-  current->next=toadd;
 }
 
-//needs to return the last element which in a stack is the top
-node* peek(node* &head){
-  node*current=head;
-  //traverse until you reach the end 
-  while(current->next!=NULL){
-    current=current->next;
+/*
+node* peek(node* head) {
+  node* current = head;
+  while (current->next != NULL) {
+    current = current->next;
   }
-  //return the last node
+  return current;
+}
+*/
+
+node* peek(node* head) {
+  node* current = head;
+  while (current != nullptr && current->next != nullptr) {
+    current = current->next;
+  }
   return current;
 }
 
-void pop(node*&head){
-  node* current=head;
-  if(current->next==NULL){
-    head=NULL;
+
+void pop(node*& head) { 
+  node* current = head;
+  if (current->next == NULL) {
+    head = NULL;
     delete current;
+    return;
   }
-  while(current->next->next!=NULL){
-    current=current->next; 
+
+  while (current->next->next != NULL) {
+    current = current->next;
   }
   delete current->next;
-  current->next=NULL; 
-  
+  current->next = NULL;
 }
 
-void enqueue(node*&head, char input){
-  if(head==NULL){
-    head=new node();
-    head->data=input;
-  }
+void enqueue(node*& head, char input) { 
+  node* newNode = new node();
+  newNode->data = input;
+  newNode->next = NULL;
 
-  node*current=head;
-
-  //add new node to the end 
-  while (current->next!=NULL){
-    current=current->next; 
+  if (head == NULL) {
+    head = newNode;
+  } else {
+    node* current = head;
+    while (current->next != NULL) {
+      current = current->next;
+    }
+    current->next = newNode;
   }
-  node*temp=new node();
-  temp->data=input;
-  current->next=temp; 
 }
+
 
 void dequeue(node* &head) {
   node*current=head;
@@ -162,15 +137,128 @@ void dequeue(node* &head) {
   }
 }
 
-void shuntingYard(node*&head, char* output){
-  cout<<output<<endl;
-  int length=strlen(output);
-  //cout<<length<<endl;
-  int len=0;
-  while(len<length){
-    if(isdigit(output[len])){
-      enqueue(head, output[len]);
+int precedence(char operators) {
+  if (operators == '+' || operators == '-') {
+    return 1; // lowest precedence but + and - are same
+  }
+  else if (operators == '*' || operators == '/') {
+    return 2; // Higher precedence
+  }
+  else if (operators=='^'){
+    return 3; //most important but also right associate not left
+  }
+  return 0;
+}
+
+
+
+
+void shuntingYard(node*& head, char* output) {
+  cout << "Input expression: " << output << endl;
+  int length = strlen(output);
+  //this is the operator stack -- anytime the queue isn't being used this should be used as the stack head
+  node* operatorStack = NULL;
+  //for the number of characters (including numbers and operators)
+  for (int i = 0; i < length; i++) {
+    //if it is a digit
+    if (isdigit(output[i])) {
+      //just add it right to the output queue
+      enqueue(head, output[i]);
     }
-    len++;
+    //if it is an open parentheses
+    else if (output[i] == '(') {
+      node* temp = new node();
+      temp->data = '(';
+      temp->next = NULL;
+      //add it to the operator stack
+      push(operatorStack, temp);
+    }
+    //if it is a closed parentheses
+    else if (output[i] == ')') {
+      //keep popping out of the stack and adding to output queue until you find the open one
+      while (peek(operatorStack) && peek(operatorStack)->data != '(') {
+	//keep adding to the output queue
+	enqueue(head, peek(operatorStack)->data); // Add operator to output
+	//if you are adding to the output queue you need to remove it from the stack
+	pop(operatorStack);
+      }
+      //if you find the open parentheses
+      if (peek(operatorStack) && peek(operatorStack)->data == '(') {
+	//pop it off the stack BUT DO NOT add it to the queue because you don't want parentheses
+	pop(operatorStack); // Remove '(' from stack
+      }
+    }
+    else if (!isdigit(output[i]) && output[i] != '(' && output[i] != ')') {
+      //^ IS RIGHT SO MAKE SURE NOT TO INCLUDE IT :((((
+      while (peek(operatorStack) && precedence(peek(operatorStack)->data) >= precedence(output[i]) &&output[i]!='^') {
+	enqueue(head, peek(operatorStack)->data); // Add operator to output
+	pop(operatorStack);
+      }
+      node* temp = new node();
+      temp->data = output[i];
+      temp->next = NULL;
+      push(operatorStack, temp);
+    }
+  }
+  while (operatorStack != NULL) {
+    // Add the rest of the operators to output to then show the postfix thing
+    enqueue(head, peek(operatorStack)->data);
+    pop(operatorStack);
+  }
+  
+  cout << "Postfix expression: ";
+  node* current = head;
+  while (current != NULL) {
+    cout << current->data << " ";
+    current = current->next;
+  }
+  cout << endl;
+}
+
+
+void buildTree(node*&head){
+  node* current=head;
+  while(current!=NULL){
+    cout<<"got here?"<<endl;
+    if(isdigit(current->data)){
+      node* newNode=new node();
+      newNode->data=current->data;
+      push(head, newNode); 
+    }
+    else if(!isdigit(current->data)){
+      cout<<"stuck here?"<<endl; 
+      node*currentnow=new node();
+      currentnow->data=current->data; 
+      node* rightNode=new node();
+      rightNode->right=peek(head)->right;
+      rightNode->left=peek(head)->left;
+      currentnow->right=rightNode;
+      pop(head);
+      
+      node* leftNode=new node(); 
+      leftNode->right=peek(head)->right;
+      leftNode->left=peek(head)->left;
+      currentnow->left=leftNode;
+      pop(head);
+
+      push(head, currentnow);
+    }
+    current=current->next;
+    dequeue(current); 
+    //current=current->next;
+    
+    
+  }
+}
+
+
+void prefix(node* &head) {
+  //print numbers after operations
+  node*current=head;
+  if (current != NULL) {
+    cout<<"got here"<<endl;
+    cout << current->data << endl;
+    prefix(current->left);
+    prefix(current->right);
   }
 }
