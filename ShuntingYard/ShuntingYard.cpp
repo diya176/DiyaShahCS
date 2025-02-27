@@ -29,7 +29,7 @@ void dequeue(node* &head); // Pass by reference
 void shuntingYard(node* &head, char* output); // Pass by reference
 int precedence (char operators);
 void buildTree(node*&head); 
-void prefix(node*&head);
+void prefix(node*head);
 
 int main(){
   node* head = NULL; // Initialize head to nullptr
@@ -51,6 +51,7 @@ int main(){
   shuntingYard(head, output);
 
   buildTree(head);
+
   prefix(head);
   return 0;
 }
@@ -82,7 +83,7 @@ node* peek(node* head) {
 
 node* peek(node* head) {
   node* current = head;
-  while (current != nullptr && current->next != nullptr) {
+  while (current!=NULL && current->next != NULL) {
     current = current->next;
   }
   return current;
@@ -127,9 +128,7 @@ void dequeue(node* &head) {
     head = NULL;
     delete current;
   }
-
-  current=head;
-  if (current->next!= NULL) {
+  else if (current->next!= NULL) {
     node* temp = current->next;
     head = NULL;
     delete current;
@@ -139,7 +138,7 @@ void dequeue(node* &head) {
 
 int precedence(char operators) {
   if (operators == '+' || operators == '-') {
-    return 1; // lowest precedence but + and - are same
+    return 1; // ent->dataent->datalowest precedence but + and - are same
   }
   else if (operators == '*' || operators == '/') {
     return 2; // Higher precedence
@@ -170,6 +169,8 @@ void shuntingYard(node*& head, char* output) {
       node* temp = new node();
       temp->data = '(';
       temp->next = NULL;
+      temp->right=NULL;
+      temp->left=NULL; 
       //add it to the operator stack
       push(operatorStack, temp);
     }
@@ -197,6 +198,8 @@ void shuntingYard(node*& head, char* output) {
       node* temp = new node();
       temp->data = output[i];
       temp->next = NULL;
+      temp->right=NULL;
+      temp->left=NULL; 
       push(operatorStack, temp);
     }
   }
@@ -218,9 +221,10 @@ void shuntingYard(node*& head, char* output) {
 
 void buildTree(node*&head){
   node* current=head;
-  while(current!=NULL){
-    cout<<"got here?"<<endl;
+  while(current->next!=NULL){
+    //cout<<"got here?"<<endl;
     if(isdigit(current->data)){
+      cout<<"got here?"<<endl;
       node* newNode=new node();
       newNode->data=current->data;
       push(head, newNode); 
@@ -230,21 +234,23 @@ void buildTree(node*&head){
       node*currentnow=new node();
       currentnow->data=current->data; 
       node* rightNode=new node();
-      rightNode->right=peek(head)->right;
+      rightNode->right=peek(current)->right;
+      //cout<<peek(current)->right->data<<endl; 
       rightNode->left=peek(head)->left;
       currentnow->right=rightNode;
       pop(head);
+
       
       node* leftNode=new node(); 
       leftNode->right=peek(head)->right;
       leftNode->left=peek(head)->left;
       currentnow->left=leftNode;
       pop(head);
-
+      
       push(head, currentnow);
     }
     current=current->next;
-    dequeue(current); 
+    dequeue(head); 
     //current=current->next;
     
     
@@ -252,13 +258,13 @@ void buildTree(node*&head){
 }
 
 
-void prefix(node* &head) {
+void prefix(node* head) {
   //print numbers after operations
-  node*current=head;
-  if (current != NULL) {
+  //node*current=head;
+  if (head != NULL) {
     cout<<"got here"<<endl;
-    cout << current->data << endl;
-    prefix(current->left);
-    prefix(current->right);
+    cout << head->data << endl;
+    prefix(head->left);
+    prefix(head->right);
   }
 }
