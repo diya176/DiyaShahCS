@@ -3,13 +3,24 @@
 #include <cstring>
 using namespace std;
 
+/*
 
+  This program simulates a binary search tree. With this tree you can add nodes, delete particular numbers, print the tree, and check if a number is in the tree. 
+  Author: Diya Shah
+  Date: 3/19/2025
+
+ */
+
+
+//tree structure with data, tree right, and tree left as parameters
 struct tree{
   int data;
   tree* right;
   tree* left;
 };
 
+//function prototypes
+//there is an add, print, search, and delete function
 void add(tree* fullTree, int toAdd);
 void printTree(tree* fullTree, int depth);
 bool search (tree* fullTree, int numToFind); 
@@ -18,13 +29,13 @@ tree* deletes(tree* fullTree, int toDelete);
 
 int main()
 {
+  //make the new tree and set the root node to -1 to show that there is nothing in the tree
   tree* fullTree=new tree();
   fullTree->data=-1; 
-
-  char input [100];
-  cout<<"What would you like to do: ADD, PRINT, SEARCH, DELETE?" <<endl;
-  cin>>input;
   while (true){
+    char input[100];
+    cout<<"What would you like to do: add MANUALLY, from a FILE, PRINT, SEARCH, DELETE, or QUIT?"<<endl;
+    cin>>input;
     if(strcmp(input,"MANUALLY")==0){
       int numofreps=0;
       cout<<"How many numbers would you like to add: ";
@@ -39,7 +50,30 @@ int main()
 	cout<<endl;
       }
     }
+    else if (strcmp(input, "DELETE")==0){
+      int numToDelete;
+      cout<<"What number would you like to delete: ";
+      cin>>numToDelete;
+      deletes(fullTree,numToDelete);
+    }
     else if (strcmp(input, "PRINT")==0){
+      printTree(fullTree,0);
+    }
+    else if (strcmp(input, "FILE")==0){
+      char fileName[100];
+      //figure out the file name
+      cout << "Please enter your file name including the extension: ";
+      cin>>fileName;
+      cin.ignore();
+      ifstream f;
+      f.open(fileName);
+      int input=0;
+      //read the numbers in from the file and add them into the tree
+      //keep changing (incrementing the index)
+      while (f>>input){
+	    add(fullTree,input);
+      }
+      f.close();
       printTree(fullTree,0);
     }
     else if (strcmp(input, "SEARCH")==0){
@@ -48,11 +82,9 @@ int main()
       cin>>num;
       if(search(fullTree,num)==true){
 	cout<<"Found it: " <<num<<endl;
-	;
       }
       else{
 	cout<<"Not found it: "<<num<<endl;
-	break;
       }
     }
     else if (strcmp(input,"QUIT")==0){
@@ -84,11 +116,16 @@ int main()
 */
 }
 
+//adding a node to the tree
 void add(tree* fullTree, int toAdd){
+  //if there is nothing in the tree
   if(fullTree->data==-1){
+    //make the new node the root
     fullTree->data=toAdd;
     return;
   }
+  //or sort it into the correct spot
+  //need to check for left and right positions as opposed to just parent!!!!
   else{
     if(toAdd<fullTree->data && fullTree->left){
       fullTree=fullTree->left;
@@ -115,6 +152,8 @@ void add(tree* fullTree, int toAdd){
 
 }
 
+//print the tree
+//adapted from the version from heap just don't need the array elements 
 void printTree(tree* fullTree, int depth){
   if(fullTree->right){
     //cout<<fullTree->right->data<<endl;
@@ -131,13 +170,12 @@ void printTree(tree* fullTree, int depth){
 }
 
 
-
+//delete a particular number from the tree
 tree* deletes(tree* fullTree, int toDelete){
-  // Base case
+  //if there is nothing in the tree, just return nothing
   if (fullTree == NULL){
     return fullTree;
   }
-  // If key to be searched is in a subtree
   if (fullTree->data > toDelete){
     fullTree->left = deletes(fullTree->left, toDelete);
   }
@@ -173,23 +211,28 @@ tree* deletes(tree* fullTree, int toDelete){
 }
 
 
-
+//search to see if a particular number is in the tree
 bool search (tree* fullTree, int numToSearch){
+  //if the number we are searching for is the root YAY!
   if(numToSearch==fullTree->data){
     return true;
     exit(0);
   }
+  //if it is not check if it is less than or greater than the root
   else if (numToSearch<fullTree->data){
+    //if it is less than the root keep going to the left 
     if(!fullTree->left){
-      cout<<fullTree->data<<endl;
+      //cout<<fullTree->data<<endl;
     }
+    //recursively keep going until you get to the number or you go through all the nodes and it is not there
     else{
       search(fullTree->left,numToSearch);
     }
   }
+  //if it is greater go down the right path
   else if (numToSearch>fullTree->data){
     if(!fullTree->right){
-      cout<<fullTree->data<<endl;
+      //cout<<fullTree->data<<endl;
     }
     else{
       search(fullTree->right,numToSearch);
@@ -198,4 +241,5 @@ bool search (tree* fullTree, int numToSearch){
   else{
     return false;
   }
+  //return false;
 }
