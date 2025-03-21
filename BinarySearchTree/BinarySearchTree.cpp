@@ -197,15 +197,18 @@ tree* deletes(tree* fullTree, int toDelete){
       delete fullTree;
       return temp;
     }
+    else{
+      tree*start=fullTree->right;
+      while(start->left!=NULL){
+	start=start->left;
+      }
+      tree*smallestNext=start;
+      fullTree->data=smallestNext->data;
+      fullTree->right=deletes(fullTree->right,smallestNext->data);
+    }
     // When THERE ARE TWO CHILDREN
     //want to find the smallest- so left side needs to be traversed
-    tree*start=fullTree;
-    while(start->left!=NULL){
-      start=start->left;
-    }
-    tree*smallestNext=start;
-    fullTree->data=smallestNext->data;
-    fullTree->right=deletes(fullTree->right,smallestNext->data);
+   
   }
   return fullTree;
 }
