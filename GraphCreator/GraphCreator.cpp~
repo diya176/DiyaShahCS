@@ -1,0 +1,97 @@
+#include <iostream>
+using namespace std;
+
+const int MAX_VERTICES = 20;
+int adjMatrix[MAX_VERTICES][MAX_VERTICES] = {0};
+char vertices[MAX_VERTICES];
+
+
+int getIndex(char index,int &vertexCount) {
+    //run through table to see if index # is there 
+    for (int i = 0; i < vertexCount; i++) {
+        if (vertices[i] == index){
+            //return the index number
+            return i;
+        }
+    }
+    //boo not there -- what are you doing?
+    return -1;
+}
+
+
+// Add a new vertex
+void addVertex(char label,int &vertexCount) {
+    if (vertexCount >= MAX_VERTICES) {
+        cout << "Vertex limit reached.\n";
+        return;
+    }
+    if (getIndex(label,vertexCount) != -1) {
+        cout << "Vertex already exists.\n";
+        return;
+    }
+    vertices[vertexCount++] = label;
+}
+
+// Add a directed, weighted edge
+void addEdge(char starting, char ending, int weight, int &vertexCount) {
+    int i = getIndex(starting,vertexCount);
+    int j = getIndex(ending,vertexCount);
+
+    if (i == -1 || j == -1) {
+        cout << "One or both vertices not found.\n";
+        return;
+    }
+    //add the weight at that point (i,j) 
+    //it might be j,i -- check on which is first row or column
+    adjMatrix[i][j] = weight;
+}
+//exact same as add edge -- but just set weight back to 0
+void removeEdge(char starting, char ending, int weight, int &vertexCount) {
+    int i = getIndex(starting,vertexCount);
+    int j = getIndex(ending,vertexCount);
+
+    if (i == -1 || j == -1) {
+        cout << "One or both vertices not found.\n";
+        return;
+    }
+    //add the weight at that point (i,j) 
+    //it might be j,i -- check on which is first row or column
+    adjMatrix[i][j] = 0;
+}
+
+// Print the adjacency matrix
+void printAdjMatrix(int &vertexCount) {
+    cout << "Adjacency Table Printed:\n ";
+    //print table taken from TicTacToe
+    for (int i = 0; i < vertexCount; i++) {
+        cout << vertices[i] << "\t";
+    }
+    cout << "\n";
+
+    for (int i = 0; i < vertexCount; i++) {
+        cout << vertices[i] << " ";
+        for (int j = 0; j < vertexCount; j++) {
+            cout << adjMatrix[i][j] << "\t";
+        }
+        cout << "\n";
+    }
+}
+
+// Main function (example usage)
+int main() {
+    int vertexCount = 0;
+
+    addVertex('A',vertexCount);
+    addVertex('B',vertexCount);
+    addVertex('C',vertexCount);
+
+    addEdge('A', 'B', 5,vertexCount);
+    addEdge('B', 'C', 3,vertexCount);
+
+    printAdjMatrix(vertexCount);
+    removeEdge('B', 'C', 3,vertexCount);
+
+    printAdjMatrix(vertexCount);
+
+    return 0;
+}
